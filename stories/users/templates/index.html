@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Facebook Login JavaScript Example</title>
-<meta charset="UTF-8">
+    <title>Facebook Login JavaScript Example</title>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 </head>
+
 <body>
 <script>
   // This is called with the results from from FB.getLoginStatus().
@@ -15,8 +18,21 @@
     // Full docs on the response object can be found in the documentation
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      testAPI();
+        // Logged into your app and Facebook.
+        testAPI();
+
+        var userId = response.authResponse.userID;
+        getFriends(userId);
+        $.ajax({
+            data: {
+                access_token: response.authResponse.accessToken,
+                user_id: userId,
+            },
+            type: 'POST',
+            url: '/api/user/',
+            success: function(response) {},
+            error: function(response) {},
+        });
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +
@@ -85,6 +101,12 @@
         'Thanks for logging in, ' + response.name + '!';
     });
   }
+
+    function getFriends(userId) {
+        FB.api('/' + userId + '/friends', function(response) {
+            debugger;
+        });
+    }
 </script>
 
 <!--

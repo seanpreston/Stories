@@ -18,7 +18,11 @@ from django.contrib import admin
 
 from .views import home
 
+from users import api
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', home, name='home')
+    url(r'^$', home, name='home'),
+
+    url(r'api/user/', api.UserView.as_view(), name='api-user-view'),
 ]
